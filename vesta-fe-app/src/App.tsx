@@ -1,8 +1,13 @@
 import logo from './static/logo.svg';
 import './App.css';
 import * as React from 'react';
+import { LendingServiceHook } from './Providers/LendingServiceHook';
 
 function App() {
+
+  const { fetchLendingInformation } = LendingServiceHook();
+
+  console.log(fetchLendingInformation());
 
   return (
     <div className="App">
