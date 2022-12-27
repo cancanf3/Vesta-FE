@@ -1,17 +1,15 @@
-import * as React from "react";
 import { LocalStorageKey } from "../Constants";
 import { EntityTypes, LendingEntry, LendingInformation } from "../LendingTypes";
 import sampleJson from '../static/InitialData.json'; 
 
 
 /**
- *  Provides Functionality to Load and Save Lending Data into the Local Storage
- *
- *  @return {LendingInformation} 
+ *  Lending Service Exposes Methods to interact with the current Persitent Storage
+ *  @returns {fetchLendingInformation, saveLendingInformation}
  */
-export const LendingServiceHook = () => {
+export const LendingService = () => {
 
-  const validateLendingInformation = React.useCallback((lendingInformation: LendingInformation) => {
+  const validateLendingInformation = (lendingInformation: LendingInformation) => {
 
     const entityFielSets: {  [key: string] : Set<string>} = {};
 
@@ -52,23 +50,38 @@ export const LendingServiceHook = () => {
       }      
     })
 
-  }, [])
+  }
 
-  const fetchLendingInformation = (): LendingInformation => {
-    // Read From API 
-    // If API Does not anything: load from SampleJson
-    const lendingInformationData = localStorage.getItem(LocalStorageKey);
-
-    if (!lendingInformationData) {
-      return sampleJson as LendingInformation;
-    }
-
-    return JSON.parse(lendingInformationData) as LendingInformation ;
-  }; 
-
-  const saveLendingInformation = (newLendingInformation: LendingInformation) => {
+  const writeLendingInformation = (newLendingInformation: LendingInformation) => {
     validateLendingInformation(newLendingInformation);
     localStorage.setItem(LocalStorageKey, JSON.stringify(newLendingInformation));   
+  }
+
+  const fetchLendingInformation = async (): Promise<LendingInformation> => {
+    
+    // Read Data From DB 
+    const lendingInformationData = localStorage.getItem(LocalStorageKey);
+
+    // If DB has not been initialized then use Sample JSON
+    return !lendingInformationData ? 
+      sampleJson : JSON.parse(lendingInformationData);
+
+  }; 
+
+  const saveLendingInformation = async (newLendingEntry: LendingEntry) => {
+    
+    // Pull current Data from DB 
+    const lendingInformation = await fetchLendingInformation();
+
+    // Find Entry to Update
+    const lendingEntryIndex = lendingInformation.findIndex((lendingEntry: LendingEntry) => {
+      return lendingEntry.entity === newLendingEntry.entity && lendingEntry.field === newLendingEntry.field
+    })
+
+    lendingInformation[lendingEntryIndex] = newLendingEntry;
+    
+    // Write new changes
+    writeLendingInformation(lendingInformation);
   }
 
   const context = {

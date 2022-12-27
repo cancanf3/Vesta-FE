@@ -1,13 +1,17 @@
 import logo from './static/logo.svg';
 import './App.css';
 import * as React from 'react';
-import { LendingServiceHook } from './Providers/LendingServiceHook';
+import { useSelector } from 'react-redux';
+import { selectBorrowers, selectLoans, selectStatus } from './Redux/LendingSlice';
 
 function App() {
 
-  const { fetchLendingInformation } = LendingServiceHook();
+  const borrowers = useSelector(selectBorrowers);
+  const loans = useSelector(selectLoans);
+  const loadingStatus = useSelector(selectStatus)
 
-  console.log(fetchLendingInformation());
+  console.log(loadingStatus);
+  console.log(borrowers, loans);
 
   return (
     <div className="App">

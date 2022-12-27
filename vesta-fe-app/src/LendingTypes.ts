@@ -23,3 +23,13 @@ export type LendingEntry = {
 }
 
 export type LendingInformation = LendingEntry[]; 
+
+export type Loan = { [field: string]: LendingEntry };
+export type Borrower = { [field: string]: LendingEntry };
+export type LoadingStatus = 'Idle' | 'Processing' | 'Error';
+
+export type LendingStoreState = {
+    status: LoadingStatus;
+    loan: Loan,
+    borrower: Borrower
+}
