@@ -5,9 +5,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import "./AppContainer.css";
 import { EntityContainer } from "./EntityContainer";
 
-type Prop = {};
-
-export const AppContainer = ({}: Prop) => {
+export const AppContainer = () => {
   const [section, setSection] = React.useState<SectionType>("Loan");
 
   const onSectionChange = (

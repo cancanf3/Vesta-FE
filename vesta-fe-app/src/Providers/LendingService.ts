@@ -1,7 +1,6 @@
 import { LocalStorageKeyInformation, LocalStorageKeyForm } from "../Constants";
 import {
   EntityInput,
-  EntityType,
   EntityTypes,
   isLendingDateInput,
   LendingEntry,
@@ -147,7 +146,8 @@ export const LendingService = () => {
             );
           } else if (
             typeof lendingInput !== "number" &&
-            typeof lendingInput !== "string"
+            typeof lendingInput !== "string" &&
+            !isLendingDateInput(lendingInput)
           ) {
             throw new Error(
               "Lending Validator: Entity Input must have a input of type date | number | string"

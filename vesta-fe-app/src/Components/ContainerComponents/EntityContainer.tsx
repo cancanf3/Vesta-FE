@@ -5,10 +5,18 @@ import {
   selectFormLoans,
 } from "../../Redux/LendingFormSlice";
 import {
+  selectInformationBorrowers,
+  selectInformationLoans,
+} from "../../Redux/LendingInformationSlice";
+import {
   BorrowerForm,
+  BorrowerInput,
   EntityType,
+  isLendingDateInput,
+  LendingDateInput,
   LendingEntry,
   LoanForm,
+  LoanInput,
 } from "../../Types/LendingTypes";
 import { DateField } from "../FieldComponents/DateField";
 import { MoneyField } from "../FieldComponents/MoneyField";
@@ -17,20 +25,38 @@ import { TextField } from "../FieldComponents/TextField";
 type Prop = { entityType: EntityType };
 
 export const EntityContainer = ({ entityType }: Prop) => {
-  const selector =
+  const formSelector =
     entityType === "Loan" ? selectFormLoans : selectFormBorrowers;
 
-  const entities: LoanForm | BorrowerForm = useSelector(selector);
+  const infoSelector =
+    entityType === "Loan" ? selectInformationLoans : selectInformationBorrowers;
+
+  const entityForm: LoanForm | BorrowerForm = useSelector(formSelector);
+  const entityInputs: LoanInput | BorrowerInput = useSelector(infoSelector);
 
   const inputFieldds = () => {
-    return Object.values(entities).map((entry: LendingEntry) => {
+    return Object.values(entityForm).map((entry: LendingEntry) => {
+      const entityInput = entityInputs[entry.field];
+
       switch (entry.type) {
-        case "string":
-          return <TextField key={entry.field} {...entry} />;
-        case "money":
-          return <MoneyField key={entry.field} {...entry} />;
-        case "date":
-          return <DateField key={entry.field} {...entry} />;
+        case "string": {
+          const value: string | undefined =
+            typeof entityInput === "string" ? entityInput : undefined;
+          return <TextField key={entry.field} {...entry} value={value} />;
+        }
+        case "money": {
+          const value: number | undefined =
+            typeof entityInput === "number" ? entityInput : undefined;
+          return <MoneyField key={entry.field} {...entry} value={value} />;
+        }
+        case "date": {
+          const value: LendingDateInput | undefined = isLendingDateInput(
+            entityInput
+          )
+            ? entityInput
+            : undefined;
+          return <DateField key={entry.field} {...entry} value={value} />;
+        }
         default:
           return <React.Fragment key={entry.field} />;
       }

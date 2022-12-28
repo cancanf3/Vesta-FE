@@ -1,13 +1,21 @@
 import * as React from "react";
 import MaterialTextField from "@mui/material/TextField";
-import { isMoneyCondition, LendingEntry } from "../../Types/LendingTypes";
+import { EntityInput, isMoneyCondition } from "../../Types/LendingTypes";
 import { IncorrectMoneyField } from "../../Constants";
+import { MoneyFieldProp } from "../../Types/ComponentTypes";
+import { useDispatch } from "react-redux";
+import { saveLendingInformation } from "../../Redux/LendingInformationSlice";
 
-type Prop = LendingEntry;
-
-export const MoneyField = ({ display, field, conditions }: Prop) => {
+export const MoneyField = ({
+  display,
+  entity,
+  field,
+  conditions,
+  value,
+}: MoneyFieldProp) => {
   const [isIncorrect, setIsIncorrect] = React.useState<boolean>(false);
-  const [value, setValue] = React.useState<number>(0);
+  const [currentValue, setCurrentValue] = React.useState<number>(value ?? 0);
+  const dispatch = useDispatch<any>();
 
   const incorrectMoneyMessage = React.useMemo(() => {
     if (isMoneyCondition(conditions)) {
@@ -24,17 +32,23 @@ export const MoneyField = ({ display, field, conditions }: Prop) => {
       return;
     }
 
-    setValue(newValue);
+    setCurrentValue(newValue);
   };
 
   const handleBlur = () => {
     if (
       isMoneyCondition(conditions) &&
-      conditions.minValue <= value &&
-      conditions.maxValue >= value
+      conditions.minValue <= currentValue &&
+      conditions.maxValue >= currentValue
     ) {
       isIncorrect && setIsIncorrect(false);
-      // Dispatch To Store
+
+      const entityInput: EntityInput = {
+        entityType: entity,
+        inputField: field,
+        lendingInput: currentValue,
+      };
+      dispatch(saveLendingInformation(entityInput));
     } else {
       setIsIncorrect(true);
     }
@@ -49,7 +63,7 @@ export const MoneyField = ({ display, field, conditions }: Prop) => {
         label={display}
         variant="outlined"
         placeholder={display}
-        value={value}
+        value={currentValue}
         onChange={handleChange}
         onBlur={handleBlur}
         error={isIncorrect}

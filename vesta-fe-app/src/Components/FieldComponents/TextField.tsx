@@ -1,13 +1,21 @@
 import * as React from "react";
 import MaterialTextField from "@mui/material/TextField";
-import { isStringCondition, LendingEntry } from "../../Types/LendingTypes";
+import { EntityInput, isStringCondition } from "../../Types/LendingTypes";
 import { IncorrectStringField } from "../../Constants";
+import { TextFieldProp } from "../../Types/ComponentTypes";
+import { useDispatch } from "react-redux";
+import { saveLendingInformation } from "../../Redux/LendingInformationSlice";
 
-type Prop = LendingEntry;
-
-export const TextField = ({ display, field, conditions }: Prop) => {
+export const TextField = ({
+  display,
+  entity,
+  field,
+  conditions,
+  value,
+}: TextFieldProp) => {
   const [isIncorrect, setIsIncorrect] = React.useState<boolean>(false);
-  const [value, setValue] = React.useState<string>("");
+  const [currentValue, setCurrrentValue] = React.useState<string>(value ?? "");
+  const dispatch = useDispatch<any>();
 
   const incorrectStringMessage = React.useMemo(() => {
     if (isStringCondition(conditions)) {
@@ -18,11 +26,11 @@ export const TextField = ({ display, field, conditions }: Prop) => {
   }, [conditions]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+    setCurrrentValue(event.target.value);
   };
 
   const handleBlur = () => {
-    if (!value) {
+    if (!currentValue) {
       return;
     }
 
@@ -33,8 +41,15 @@ export const TextField = ({ display, field, conditions }: Prop) => {
 
     const regex = new RegExp(conditions.regex);
 
-    if (regex.test(value)) {
+    if (regex.test(currentValue)) {
       // Dispatch To Store
+
+      const entityInput: EntityInput = {
+        entityType: entity,
+        inputField: field,
+        lendingInput: currentValue,
+      };
+      dispatch(saveLendingInformation(entityInput));
       isIncorrect && setIsIncorrect(false);
     } else {
       setIsIncorrect(true);
@@ -49,7 +64,7 @@ export const TextField = ({ display, field, conditions }: Prop) => {
         label={display}
         variant="outlined"
         placeholder={display}
-        value={value}
+        value={currentValue}
         onChange={handleChange}
         onBlur={handleBlur}
         error={isIncorrect}
