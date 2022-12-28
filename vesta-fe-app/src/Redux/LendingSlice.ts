@@ -1,5 +1,5 @@
-import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, EntityState } from "@reduxjs/toolkit";
-import { LendingEntry, LendingInformation, LendingStoreState } from "../Types/LendingTypes";
+import { createAsyncThunk, createEntityAdapter, createSelector, createSlice } from "@reduxjs/toolkit";
+import { LendingEntry, LendingStoreState } from "../Types/LendingTypes";
 import { LendingService } from "../Providers/LendingService";
 
 
@@ -16,14 +16,14 @@ export const initialState: LendingStoreState = lendingAdapter.getInitialState({
 });
 
 /**
- * Thunk method to fetch Lending information and dispatch it to the App's State
- * @returns {LendingInformation}
+ * Thunk method to fetch Lending Form input and dispatch it to the App's State
+ * @returns {LendingForm}
  */
-export const fetchLendingInformation = createAsyncThunk('lending/fetchLendingInformation', async () => {
+export const fetchLendingForm = createAsyncThunk('lending/fetchForm', async () => {
 
-    const { fetchLendingInformation } = LendingService();
+    const { fetchLendingForm } = LendingService();
 
-    const response = await fetchLendingInformation();
+    const response = await fetchLendingForm();
 
     console.log(response);
     return response
@@ -33,13 +33,13 @@ export const fetchLendingInformation = createAsyncThunk('lending/fetchLendingInf
 /**
  * Thunk method to fetch Lending information and dispatch it to the App's State
  * @param {LendingEntry} lendingEntry Modified Lending entry 
- * @returns {LendingInformation}
+ * @returns {LendingForm}
  */
-export const saveLendingInformation = createAsyncThunk('lending/saveLendingInformation', async (lendingEntry: LendingEntry) => {
+export const saveLendingForm = createAsyncThunk('lending/saveForm', async (lendingEntry: LendingEntry) => {
 
-    const { saveLendingInformation } = LendingService();
+    const { saveLendingForm } = LendingService();
 
-    await saveLendingInformation(lendingEntry);
+    await saveLendingForm(lendingEntry);
     return lendingEntry;
 })
 
@@ -53,10 +53,10 @@ const lendingSlice = createSlice({
         }
     }, 
     extraReducers: builder => {
-        builder.addCase(fetchLendingInformation.pending, (state, action) => {
+        builder.addCase(fetchLendingForm.pending, (state, action) => {
             state.status = 'Processing'
         })
-        .addCase(fetchLendingInformation.fulfilled, (state, action) => {
+        .addCase(fetchLendingForm.fulfilled, (state, action) => {
             state.status = 'Idle';
 
             action.payload.forEach((lendingEntry: LendingEntry) => {
@@ -67,20 +67,20 @@ const lendingSlice = createSlice({
                 }
             });    
         })
-        .addCase(fetchLendingInformation.rejected, (state, action) => {
+        .addCase(fetchLendingForm.rejected, (state, action) => {
             state.status = 'Error';
         })
-        .addCase(saveLendingInformation.pending, (state, action) => {
+        .addCase(saveLendingForm.pending, (state, action) => {
             state.status = 'Processing'
         })
-        .addCase(saveLendingInformation.fulfilled, (state, action) => {
+        .addCase(saveLendingForm.fulfilled, (state, action) => {
             if (action.payload.entity === 'Loan') {
                 state.loan[action.payload.field] = action.payload;
             } else {
                 state.borrower[action.payload.field] = action.payload;
             }
         })
-        .addCase(saveLendingInformation.rejected, (state, action) => {
+        .addCase(saveLendingForm.rejected, (state, action) => {
             state.status = 'Error';
         })
 

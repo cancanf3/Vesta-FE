@@ -31,7 +31,7 @@ export type LendingEntry = {
     conditions?: MoneyCondition | StringCondition
 }
 
-export type LendingInformation = LendingEntry[]; 
+export type LendingForm = LendingEntry[]; 
 
 export type Loan = { [field: string]: LendingEntry };
 export type Borrower = { [field: string]: LendingEntry };

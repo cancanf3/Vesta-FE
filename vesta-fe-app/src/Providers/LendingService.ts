@@ -1,15 +1,15 @@
 import { LocalStorageKey } from "../Constants";
-import { EntityTypes, LendingEntry, LendingInformation } from "../Types/LendingTypes";
+import { EntityTypes, LendingEntry, LendingForm } from "../Types/LendingTypes";
 import sampleJson from '../static/InitialData.json'; 
 
 
 /**
  *  Lending Service Exposes Methods to interact with the current Persitent Storage
- *  @returns {context = {fetchLendingInformation, saveLendingInformation}}
+ *  @returns {context = {fetchLendingForm, saveLendingForm}}
  */
 export const LendingService = () => {
 
-  const validateLendingInformation = (lendingInformation: LendingInformation) => {
+  const validateLendingForm = (lendingForm: LendingForm) => {
 
     const entityFielSets: {  [key: string] : Set<string>} = {};
 
@@ -17,7 +17,7 @@ export const LendingService = () => {
       entityFielSets[entityType] = new Set<string>();
     })
     
-    lendingInformation.forEach((lendingEntry: LendingEntry) => {
+    lendingForm.forEach((lendingEntry: LendingEntry) => {
 
       // If String or Money, Then Condition must be defined
       if (!lendingEntry.entity.includes('Loan') && !lendingEntry.entity.includes('Borrower')) {
@@ -52,41 +52,41 @@ export const LendingService = () => {
 
   }
 
-  const writeLendingInformation = (newLendingInformation: LendingInformation) => {
-    validateLendingInformation(newLendingInformation);
-    localStorage.setItem(LocalStorageKey, JSON.stringify(newLendingInformation));   
+  const writeLendingForm = (newLendingForm: LendingForm) => {
+    validateLendingForm(newLendingForm);
+    localStorage.setItem(LocalStorageKey, JSON.stringify(newLendingForm));   
   }
 
-  const fetchLendingInformation = async (): Promise<LendingInformation> => {
+  const fetchLendingForm = async (): Promise<LendingForm> => {
     
     // Read Data From DB 
-    const lendingInformationData = localStorage.getItem(LocalStorageKey);
+    const lendingFormData = localStorage.getItem(LocalStorageKey);
 
     // If DB has not been initialized then use Sample JSON
-    return !lendingInformationData ? 
-      sampleJson : JSON.parse(lendingInformationData);
+    return !lendingFormData ? 
+      sampleJson : JSON.parse(lendingFormData);
 
   }; 
 
-  const saveLendingInformation = async (newLendingEntry: LendingEntry) => {
+  const saveLendingForm = async (newLendingEntry: LendingEntry) => {
     
     // Pull current Data from DB 
-    const lendingInformation = await fetchLendingInformation();
+    const lendingForm = await fetchLendingForm();
 
     // Find Entry to Update
-    const lendingEntryIndex = lendingInformation.findIndex((lendingEntry: LendingEntry) => {
+    const lendingEntryIndex = lendingForm.findIndex((lendingEntry: LendingEntry) => {
       return lendingEntry.entity === newLendingEntry.entity && lendingEntry.field === newLendingEntry.field
     })
 
-    lendingInformation[lendingEntryIndex] = newLendingEntry;
+    lendingForm[lendingEntryIndex] = newLendingEntry;
     
     // Write new changes
-    writeLendingInformation(lendingInformation);
+    writeLendingForm(lendingForm);
   }
 
   const context = {
-    saveLendingInformation,
-    fetchLendingInformation
+    saveLendingForm,
+    fetchLendingForm
   };
 
   return context; 
