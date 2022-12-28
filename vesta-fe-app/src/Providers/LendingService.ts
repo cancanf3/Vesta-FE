@@ -166,6 +166,7 @@ export const LendingService = () => {
       LocalStorageKeyInformation,
       JSON.stringify(newLendingInformation)
     );
+    console.log(newLendingInformation);
   };
 
   const saveLendingInformation = async (entityInput: EntityInput) => {
@@ -181,11 +182,24 @@ export const LendingService = () => {
     writeLendingInformation(lendingInformation);
   };
 
+  const removeLendingInformation = async (entityInput: EntityInput) => {
+    // Pull current Data from DB
+    const lendingInformation: LendingInformation =
+      await fetchLendingInformation();
+
+    // Find Entry to Delete
+    delete lendingInformation[entityInput.entityType][entityInput.inputField];
+
+    // Write new changes
+    writeLendingInformation(lendingInformation);
+  };
+
   const context = {
     saveLendingForm,
     fetchLendingForm,
     fetchLendingInformation,
     saveLendingInformation,
+    removeLendingInformation,
   };
 
   return context;

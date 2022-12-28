@@ -36,7 +36,7 @@ export const fetchLendingInformation = createAsyncThunk(
 );
 
 /**
- * Thunk method to fetch Lending information and dispatch it to the App's State
+ * Thunk method to save Lending information and dispatch it to the App's State
  * @param {LendingEntry} lendingEntry Modified Lending entry
  * @returns {LendingForm}
  */
@@ -46,6 +46,21 @@ export const saveLendingInformation = createAsyncThunk(
     const { saveLendingInformation } = LendingService();
 
     await saveLendingInformation(entityInput);
+    return entityInput;
+  }
+);
+
+/**
+ * Thunk method to delete Lending information and dispatch it to the App's State
+ * @param {LendingEntry} lendingEntry Modified Lending entry
+ * @returns {LendingForm}
+ */
+export const removeLendingInformation = createAsyncThunk(
+  "lending/removeInformation",
+  async (entityInput: EntityInput) => {
+    const { removeLendingInformation } = LendingService();
+
+    await removeLendingInformation(entityInput);
     return entityInput;
   }
 );
@@ -82,6 +97,19 @@ const lendingSlice = createSlice({
         }
       })
       .addCase(saveLendingInformation.rejected, (state, action) => {
+        state.status = "Error";
+      })
+      .addCase(removeLendingInformation.pending, (state, action) => {
+        state.status = "Processing";
+      })
+      .addCase(removeLendingInformation.fulfilled, (state, action) => {
+        if (action.payload.entityType === "Loan") {
+          delete state.Loan[action.payload.inputField];
+        } else if (action.payload.entityType === "Borrower") {
+          delete state.Loan[action.payload.inputField];
+        }
+      })
+      .addCase(removeLendingInformation.rejected, (state, action) => {
         state.status = "Error";
       });
   },

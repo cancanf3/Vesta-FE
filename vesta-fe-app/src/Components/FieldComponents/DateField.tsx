@@ -5,8 +5,12 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { EntityInput } from "../../Types/LendingTypes";
 import TextField from "@mui/material/TextField";
 import { useDispatch } from "react-redux";
-import { saveLendingInformation } from "../../Redux/LendingInformationSlice";
+import {
+  removeLendingInformation,
+  saveLendingInformation,
+} from "../../Redux/LendingInformationSlice";
 import { DateFieldProp } from "../../Types/ComponentTypes";
+import { DateValidationError } from "@mui/x-date-pickers/internals/hooks/validation/useDateValidation";
 
 export const DateField = ({ display, entity, field, value }: DateFieldProp) => {
   const day = React.useMemo(() => {
@@ -19,38 +23,57 @@ export const DateField = ({ display, entity, field, value }: DateFieldProp) => {
   }, [value]);
 
   const [currentValue, setCurrentValue] = React.useState<Dayjs | null>(day);
+  const [isIncorrect, setIsIncorrect] = React.useState<boolean>(false);
   const dispatch = useDispatch<any>();
 
   const handleChange = (newValue: Dayjs | null) => {
-    if (!newValue) {
+    setCurrentValue(newValue);
+  };
+
+  const handleBlur = () => {
+    if (isIncorrect) {
       return;
     }
-
-    setCurrentValue(newValue);
 
     const entityInput: EntityInput = {
       entityType: entity,
       inputField: field,
       lendingInput: {
-        day: newValue.date(),
-        month: newValue.month(),
-        year: newValue.year(),
+        day: currentValue?.date() ?? 1,
+        month: currentValue?.month() ?? 0,
+        year: currentValue?.year() ?? 2000,
       },
     };
 
-    dispatch(saveLendingInformation(entityInput));
+    if (!currentValue) {
+      dispatch(removeLendingInformation(entityInput));
+    } else {
+      setCurrentValue(currentValue);
+      dispatch(saveLendingInformation(entityInput));
+    }
+  };
+
+  const handleError = (
+    reason: DateValidationError,
+    value: dayjs.Dayjs | null
+  ) => {
+    setIsIncorrect(reason !== null);
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"en"}>
       <div>
         <span>{display}</span>
-        <DatePicker
-          label={display}
-          value={currentValue}
-          onChange={handleChange}
-          renderInput={(params) => <TextField {...params} />}
-        />
+        <div onBlur={handleBlur}>
+          <DatePicker
+            label={display}
+            closeOnSelect={true}
+            value={currentValue}
+            onChange={handleChange}
+            onError={handleError}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </div>
       </div>
     </LocalizationProvider>
   );

@@ -4,7 +4,10 @@ import { EntityInput, isStringCondition } from "../../Types/LendingTypes";
 import { IncorrectStringField } from "../../Constants";
 import { TextFieldProp } from "../../Types/ComponentTypes";
 import { useDispatch } from "react-redux";
-import { saveLendingInformation } from "../../Redux/LendingInformationSlice";
+import {
+  removeLendingInformation,
+  saveLendingInformation,
+} from "../../Redux/LendingInformationSlice";
 
 export const TextField = ({
   display,
@@ -30,7 +33,15 @@ export const TextField = ({
   };
 
   const handleBlur = () => {
+    const entityInput: EntityInput = {
+      entityType: entity,
+      inputField: field,
+      lendingInput: currentValue,
+    };
+
     if (!currentValue) {
+      dispatch(removeLendingInformation(entityInput));
+      isIncorrect && setIsIncorrect(false);
       return;
     }
 
@@ -42,13 +53,6 @@ export const TextField = ({
     const regex = new RegExp(conditions.regex);
 
     if (regex.test(currentValue)) {
-      // Dispatch To Store
-
-      const entityInput: EntityInput = {
-        entityType: entity,
-        inputField: field,
-        lendingInput: currentValue,
-      };
       dispatch(saveLendingInformation(entityInput));
       isIncorrect && setIsIncorrect(false);
     } else {

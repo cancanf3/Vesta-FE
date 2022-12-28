@@ -4,7 +4,10 @@ import { EntityInput, isMoneyCondition } from "../../Types/LendingTypes";
 import { IncorrectMoneyField } from "../../Constants";
 import { MoneyFieldProp } from "../../Types/ComponentTypes";
 import { useDispatch } from "react-redux";
-import { saveLendingInformation } from "../../Redux/LendingInformationSlice";
+import {
+  removeLendingInformation,
+  saveLendingInformation,
+} from "../../Redux/LendingInformationSlice";
 
 export const MoneyField = ({
   display,
@@ -36,18 +39,28 @@ export const MoneyField = ({
   };
 
   const handleBlur = () => {
+    if (currentValue === value) {
+      return;
+    }
+
+    const entityInput: EntityInput = {
+      entityType: entity,
+      inputField: field,
+      lendingInput: currentValue,
+    };
+
+    if (currentValue === 0) {
+      isIncorrect && setIsIncorrect(false);
+      dispatch(removeLendingInformation(entityInput));
+      return;
+    }
+
     if (
       isMoneyCondition(conditions) &&
       conditions.minValue <= currentValue &&
       conditions.maxValue >= currentValue
     ) {
       isIncorrect && setIsIncorrect(false);
-
-      const entityInput: EntityInput = {
-        entityType: entity,
-        inputField: field,
-        lendingInput: currentValue,
-      };
       dispatch(saveLendingInformation(entityInput));
     } else {
       setIsIncorrect(true);

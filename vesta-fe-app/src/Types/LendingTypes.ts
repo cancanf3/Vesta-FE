@@ -71,6 +71,7 @@ export function isLendingDateInput(
   return (
     typeof lendingDateInput !== "string" &&
     typeof lendingDateInput !== "number" &&
+    typeof lendingDateInput !== "undefined" &&
     lendingDateInput.hasOwnProperty("month") &&
     lendingDateInput.hasOwnProperty("day") &&
     lendingDateInput.hasOwnProperty("year")
