@@ -4,8 +4,17 @@ export type MoneyCondition = {
     minValue: number
 }
 
+export function isMoneyCondition(condition: MoneyCondition | StringCondition | undefined): condition is MoneyCondition {
+    return condition !== undefined && condition.hasOwnProperty('minValue') && condition.hasOwnProperty('maxValue'); 
+}
+
+
 export type StringCondition = {
-    regex: RegExp
+    regex: string
+}
+
+export function isStringCondition(condition: MoneyCondition | StringCondition | undefined): condition is StringCondition {
+    return condition !== undefined && condition.hasOwnProperty('regex'); 
 }
 
 
@@ -19,7 +28,7 @@ export type LendingEntry = {
     display: string,
     field: string,
     type: InputType,
-    condition?: MoneyCondition | StringCondition
+    conditions?: MoneyCondition | StringCondition
 }
 
 export type LendingInformation = LendingEntry[]; 

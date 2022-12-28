@@ -1,5 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, EntityState } from "@reduxjs/toolkit";
-import { LendingEntry, LendingInformation, LendingStoreState } from "../LendingTypes";
+import { LendingEntry, LendingInformation, LendingStoreState } from "../Types/LendingTypes";
 import { LendingService } from "../Providers/LendingService";
 
 
@@ -85,7 +85,7 @@ const lendingSlice = createSlice({
         })
 
     }
-})
+});
 
 
 /**

@@ -1,11 +1,11 @@
 import { LocalStorageKey } from "../Constants";
-import { EntityTypes, LendingEntry, LendingInformation } from "../LendingTypes";
+import { EntityTypes, LendingEntry, LendingInformation } from "../Types/LendingTypes";
 import sampleJson from '../static/InitialData.json'; 
 
 
 /**
  *  Lending Service Exposes Methods to interact with the current Persitent Storage
- *  @returns {fetchLendingInformation, saveLendingInformation}
+ *  @returns {context = {fetchLendingInformation, saveLendingInformation}}
  */
 export const LendingService = () => {
 
@@ -45,7 +45,7 @@ export const LendingService = () => {
       } 
 
       if ( (lendingEntry.type.includes('money') || lendingEntry.type.includes('string')) && 
-      (lendingEntry.condition === null || lendingEntry.condition === undefined) ) {
+      (lendingEntry.conditions === null || lendingEntry.conditions === undefined) ) {
         throw new Error("Lending Validator: Entity type money or string must be have a condition")
       }      
     })
