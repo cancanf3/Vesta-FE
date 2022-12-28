@@ -25,9 +25,8 @@ export const EntityContainer = ({ entityType }: Prop) => {
           return <TextField key={entry.field} {...entry} />;
         case "money":
           return <MoneyField key={entry.field} {...entry} />;
-        // case "date":
-        //   return <DateField key={entry.field} {...entry} />;
-
+        case "date":
+          return <DateField key={entry.field} {...entry} />;
         default:
           return <React.Fragment key={entry.field} />;
       }

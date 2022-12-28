@@ -87,7 +87,6 @@ const lendingSlice = createSlice({
     }
 });
 
-
 /**
  * Selector that return all borrower entries from App's State 
  * @param state State's App
