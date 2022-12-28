@@ -48,7 +48,7 @@ export const MoneyField = ({ display, field, conditions }: Prop) => {
         id={field}
         label={display}
         variant="outlined"
-        defaultValue={display}
+        placeholder={display}
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}

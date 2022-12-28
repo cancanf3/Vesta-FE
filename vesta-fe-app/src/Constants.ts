@@ -1,6 +1,7 @@
 
 
-export const LocalStorageKey = 'lendingForm';
+export const LocalStorageKeyForm = 'lendingForm';
+export const LocalStorageKeyInformation = 'lendingInformation';
 
 export const IncorrectStringField = (pattern: string): string => `Text does not follow the correct formatting: ${pattern}`;
 

@@ -1,11 +1,14 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { selectBorrowers, selectLoans } from "../../Redux/LendingSlice";
 import {
-  Borrower,
+  selectFormBorrowers,
+  selectFormLoans,
+} from "../../Redux/LendingFormSlice";
+import {
+  BorrowerForm,
   EntityType,
   LendingEntry,
-  Loan,
+  LoanForm,
 } from "../../Types/LendingTypes";
 import { DateField } from "../FieldComponents/DateField";
 import { MoneyField } from "../FieldComponents/MoneyField";
@@ -14,9 +17,10 @@ import { TextField } from "../FieldComponents/TextField";
 type Prop = { entityType: EntityType };
 
 export const EntityContainer = ({ entityType }: Prop) => {
-  const selector = entityType === "Loan" ? selectLoans : selectBorrowers;
+  const selector =
+    entityType === "Loan" ? selectFormLoans : selectFormBorrowers;
 
-  const entities: Loan | Borrower = useSelector(selector);
+  const entities: LoanForm | BorrowerForm = useSelector(selector);
 
   const inputFieldds = () => {
     return Object.values(entities).map((entry: LendingEntry) => {

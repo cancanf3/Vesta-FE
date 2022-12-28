@@ -5,9 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import store from './Redux/Store'
-import {fetchLendingForm} from './Redux/LendingSlice';
+import {fetchLendingForm} from './Redux/LendingFormSlice';
+import {fetchLendingInformation} from './Redux/LendingInformationSlice';
 
 store.dispatch(fetchLendingForm())
+store.dispatch(fetchLendingInformation())
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(

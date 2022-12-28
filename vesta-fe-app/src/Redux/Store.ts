@@ -1,9 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
-import lendingReducer from './LendingSlice'
+import { configureStore } from "@reduxjs/toolkit";
+import lendingFormReducer from "./LendingFormSlice";
+import lendingInformationReducer from "./LendingInformationSlice";
 
 const store = configureStore({
-  reducer: { lending: lendingReducer },
-  devTools: true
-})
+  reducer: {
+    form: lendingFormReducer,
+    information: lendingInformationReducer,
+  },
+  devTools: true,
+});
 
-export default store
+export default store;
