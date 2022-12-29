@@ -94,6 +94,13 @@ const lendingSlice = createSlice({
 });
 
 /**
+ * Selector that return all form entries from App's State
+ * @param state State's App
+ * @returns {Borrower} Borrower Input data
+ */
+export const selectForm = (state: { form: LendingFormState }) => state.form;
+
+/**
  * Selector that return all borrower entries from App's State
  * @param state State's App
  * @returns {Borrower} Borrower Input data

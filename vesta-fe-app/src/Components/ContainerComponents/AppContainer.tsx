@@ -15,8 +15,6 @@ export const AppContainer = () => {
 
   const AppIndicator = () => {
     const stateStatus = useSelector(selectInformationStatus);
-    console.log(stateStatus);
-
     if (stateStatus === "Processing") {
       return <CircularProgress color="secondary" size={30} />;
     }

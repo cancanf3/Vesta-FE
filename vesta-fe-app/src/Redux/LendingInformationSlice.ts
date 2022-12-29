@@ -94,7 +94,8 @@ const lendingSlice = createSlice({
         if (action.payload.entityType === "Loan") {
           state.Loan[action.payload.inputField] = action.payload.lendingInput;
         } else if (action.payload.entityType === "Borrower") {
-          state.Loan[action.payload.inputField] = action.payload.lendingInput;
+          state.Borrower[action.payload.inputField] =
+            action.payload.lendingInput;
         }
       })
       .addCase(saveLendingInformation.rejected, (state, action) => {
