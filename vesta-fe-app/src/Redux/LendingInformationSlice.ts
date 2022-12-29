@@ -90,6 +90,7 @@ const lendingSlice = createSlice({
         state.status = "Processing";
       })
       .addCase(saveLendingInformation.fulfilled, (state, action) => {
+        state.status = "Idle";
         if (action.payload.entityType === "Loan") {
           state.Loan[action.payload.inputField] = action.payload.lendingInput;
         } else if (action.payload.entityType === "Borrower") {
@@ -103,6 +104,7 @@ const lendingSlice = createSlice({
         state.status = "Processing";
       })
       .addCase(removeLendingInformation.fulfilled, (state, action) => {
+        state.status = "Idle";
         if (action.payload.entityType === "Loan") {
           delete state.Loan[action.payload.inputField];
         } else if (action.payload.entityType === "Borrower") {

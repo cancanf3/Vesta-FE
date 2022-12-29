@@ -8,6 +8,7 @@ import {
   removeLendingInformation,
   saveLendingInformation,
 } from "../../Redux/LendingInformationSlice";
+import "./InputField.css";
 
 export const MoneyField = ({
   display,
@@ -68,8 +69,7 @@ export const MoneyField = ({
   };
 
   return (
-    <div>
-      <span>{display}</span>
+    <div className="inputField">
       <MaterialTextField
         inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
         id={field}

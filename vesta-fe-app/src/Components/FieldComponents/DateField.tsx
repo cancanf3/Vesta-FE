@@ -11,6 +11,7 @@ import {
 } from "../../Redux/LendingInformationSlice";
 import { DateFieldProp } from "../../Types/ComponentTypes";
 import { DateValidationError } from "@mui/x-date-pickers/internals/hooks/validation/useDateValidation";
+import "./InputField.css";
 
 export const DateField = ({ display, entity, field, value }: DateFieldProp) => {
   const day = React.useMemo(() => {
@@ -62,8 +63,7 @@ export const DateField = ({ display, entity, field, value }: DateFieldProp) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"en"}>
-      <div>
-        <span>{display}</span>
+      <div className="inputField">
         <div onBlur={handleBlur}>
           <DatePicker
             label={display}

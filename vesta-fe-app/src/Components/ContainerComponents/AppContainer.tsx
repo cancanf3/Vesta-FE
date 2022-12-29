@@ -1,42 +1,46 @@
 import * as React from "react";
-import { SectionType, SectionTypes } from "../../Types/ComponentTypes";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { SectionType } from "../../Types/ComponentTypes";
 import "./AppContainer.css";
 import { EntityContainer } from "./EntityContainer";
+import { Box, CircularProgress, Tab, Tabs } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectInformationStatus } from "../../Redux/LendingInformationSlice";
 
 export const AppContainer = () => {
   const [section, setSection] = React.useState<SectionType>("Loan");
 
-  const onSectionChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newSection: string
-  ) => {
-    setSection(newSection);
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setSection(newValue);
   };
 
-  const toggleButtons = () => {
-    return SectionTypes.map((section: string) => (
-      <ToggleButton key={section} value={section}>
-        {section}
-      </ToggleButton>
-    ));
+  const AppIndicator = () => {
+    const stateStatus = useSelector(selectInformationStatus);
+    console.log(stateStatus);
+
+    if (stateStatus === "Processing") {
+      return <CircularProgress color="secondary" size={30} />;
+    }
+
+    return <React.Fragment />;
   };
 
   return (
     <div className="appContainer">
-      <ToggleButtonGroup
-        color="standard"
-        value={section}
-        exclusive
-        onChange={onSectionChange}
-        aria-label="Platform"
-      >
-        {toggleButtons()}
-      </ToggleButtonGroup>
-      <div className="formContainer">
-        <EntityContainer entityType={section} />
-      </div>
+      <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
+        <Tabs
+          value={section}
+          onChange={handleChange}
+          textColor="primary"
+          indicatorColor="primary"
+        >
+          <Tab value="Loan" label="Loan Information" />
+          <Tab value="Borrower" label="Loan Borrower" />
+        </Tabs>
+        <div className="progressIndicator">
+          <AppIndicator />
+        </div>
+      </Box>
+      <EntityContainer entityType={section} />
     </div>
   );
 };

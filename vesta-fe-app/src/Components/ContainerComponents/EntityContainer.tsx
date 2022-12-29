@@ -21,6 +21,7 @@ import {
 import { DateField } from "../FieldComponents/DateField";
 import { MoneyField } from "../FieldComponents/MoneyField";
 import { TextField } from "../FieldComponents/TextField";
+import "./EntityContainer.css";
 
 type Prop = { entityType: EntityType };
 
@@ -63,5 +64,5 @@ export const EntityContainer = ({ entityType }: Prop) => {
     });
   };
 
-  return <React.Fragment>{inputFieldds()}</React.Fragment>;
+  return <div className="formContainer"> {inputFieldds()}</div>;
 };

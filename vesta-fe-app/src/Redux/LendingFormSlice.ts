@@ -80,6 +80,7 @@ const lendingSlice = createSlice({
         state.status = "Processing";
       })
       .addCase(saveLendingForm.fulfilled, (state, action) => {
+        state.status = "Idle";
         if (action.payload.entity === "Loan") {
           state.Loan[action.payload.field] = action.payload;
         } else {

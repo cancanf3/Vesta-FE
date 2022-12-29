@@ -12,9 +12,13 @@ import sampleJson from "../static/InitialData.json";
 
 /**
  *  Lending Service Exposes Methods to interact with the current Persitent Storage
- *  @returns {context = {fetchLendingForm, saveLendingForm}}
+ *  @returns {context = {saveLendingForm,fetchLendingForm,fetchLendingInformation,saveLendingInformation,removeLendingInformation,}}
  */
 export const LendingService = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const APIDelayMock = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
   const validateLendingForm = (lendingForm: LendingForm) => {
     const entityFielSets: { [key: string]: Set<string> } = {};
 
