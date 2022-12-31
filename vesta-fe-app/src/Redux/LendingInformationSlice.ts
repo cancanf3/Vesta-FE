@@ -29,8 +29,6 @@ export const fetchLendingInformation = createAsyncThunk(
     const { fetchLendingInformation } = LendingService();
 
     const response = await fetchLendingInformation();
-
-    console.log(response);
     return response;
   }
 );

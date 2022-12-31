@@ -113,7 +113,11 @@ export const LendingService = () => {
       }
     );
 
-    lendingForm[lendingEntryIndex] = newLendingEntry;
+    if (lendingEntryIndex !== -1) {
+      lendingForm[lendingEntryIndex] = newLendingEntry;
+    } else {
+      lendingForm.push(newLendingEntry);
+    }
 
     // Write new changes
     writeLendingForm(lendingForm);
@@ -170,7 +174,6 @@ export const LendingService = () => {
       LocalStorageKeyInformation,
       JSON.stringify(newLendingInformation)
     );
-    console.log(newLendingInformation);
   };
 
   const saveLendingInformation = async (entityInput: EntityInput) => {

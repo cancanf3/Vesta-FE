@@ -28,8 +28,6 @@ export const fetchLendingForm = createAsyncThunk(
     const { fetchLendingForm } = LendingService();
 
     const response = await fetchLendingForm();
-
-    console.log(response);
     return response;
   }
 );
