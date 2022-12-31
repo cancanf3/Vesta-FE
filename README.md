@@ -56,3 +56,4 @@ Test at the AppContainer Level
 Note: Modifying the InputJson could make the test suits to fail
 
 ## Instructions
+Please read ./vesta-fe-app/README.md
