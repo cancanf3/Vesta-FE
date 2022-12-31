@@ -174,6 +174,7 @@ export const LendingService = () => {
       LocalStorageKeyInformation,
       JSON.stringify(newLendingInformation)
     );
+    console.log(newLendingInformation);
   };
 
   const saveLendingInformation = async (entityInput: EntityInput) => {
