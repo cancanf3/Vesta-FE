@@ -1,17 +1,18 @@
 # Vesta-FE
 
-
 ## Requirements
 ### PDF 
-Please see the PDF attached to this project
+Please see the PDF attached to this project Front-End Project Interview.pdf 
 
 ## Technical Choices
 
 - React 
 - Typescript
 - Material UI for Component Library
-- Emotion as CSS Framework
-- Redux for StateManagement with Redux Toolkit to leverage latest Redux patterns
+- Emotion as CSS Framework (Decided to use Material UI Theme Provider Instead)
+- Redux for StateManagement with 
+    - Redux Toolkit to leverage latest Redux patterns
+    - Thunk Methods for Async Reducers
 - Jest and React Testing Library
 
 #### Web App Patterns
@@ -21,59 +22,37 @@ Please see the PDF attached to this project
 
 ## Component Hierarchy
 
-1. LendingServiceProvider.tsx: API Provider 
-2. LendingProvider.tsx: State Management Hook 
-3. LendingTypes.ts: File defining the types used in the App
+1. LendingService.tsx: API Provider to interact with JSON File and Backing Storage (LocalStorage) 
+2. Redux/: State Management Provider
+    1. LendingFormSlice.ts: Set of Selectors, State and Reducers to interact with Form Object. Functionality to add new objects is implemented but not leveraged, it only execute reads
+    2. LendingInformationSlice.ts: Set of Selectors, State and Reducrs to interact with the information saved in the form
+    3. Store.ts: Redux store 
+3. Types: 
+    1. LendingTypes.ts: File defining the types used to represent the Lending object for the form and the information
+    2. ComponentTypes.ts: File defining objects pertinent to the React component layouts 
 4. AppContainer.tsx
 	1. EntityContainer.tsx
 		1. TextField.tsx
 		2. MoneyField.tsx
 		3. DateField.tsx
-5. TestData.ts 
-	1. Test Data, Normal 
-	2. Test Data, Incorrect Data
-	3. Test Data, Empty Questions
-	4. Test Data, Empty Everything
 
 ## Test Plan
 
-Test at the EntityContainer Level
+Test at the API Level
 1. Test loading all data
 2. Test Loading empty data
 3. Test Loading Input with no data
 
 Test at Field Level
-1. Test Adding Data
+1. Test loading Component with Data
 2. Test Adding Incorrect Data
 
-## Notes: 
-- Keep Components Dynamic: 'Loan' | 'Borrower' and 'string' | 'Money' | 'date'
-- Only use Prop at the Field level
-- Might use a Toggle Button to go between Components
-- As of now, there is no functionality to add new inputs on the go. 
-- Validation should happen at the input level and only submit to the API if text is valid
+Test at the AppContainer Level
+1. Test App renders Loan information correctly
+2. Test App renders Borrower information Correctly
+3. Test App rendersand modify information Correctly
+3. Test App rendersand modify information Incorrectly based on the given condition
 
-### Redux  Notes:
-- Typing would not go into the Redux Store but OnBlur data after they have been validated 
-	- Keep Redux store clean from Corrupted Data (Can reducer have validators to reject changes?)
-- Define Selectors: 
-	- To Get the right LendingInput based on (Entity, Field) pair
-- Single Global Store
-- Once new State has been calculated, Changes will be pushed to the local store
-- Expose as a React Provider 
-- If there is need to print the granular changes, a middleware can be a fancy way to do it  
-- useSelector to fetch the right data to every single component
-- useDispatch to dispatch the action directly into the store at any level
-- [use MiddleWare](https://redux.js.org/tutorials/fundamentals/part-6-async-logic#saving-todo-items) to attach the LendingServiceProvider: 
-- [Implement Loading Indicator with Redux](https://redux.js.org/tutorials/fundamentals/part-7-standard-patterns#loading-state-enum-values)
-- State going to have a Borrower Object and a Lean Object, so they can be enumerated
-#### How to optimize rendering ?
-- Keep InputFields with primitive props 
-- Have EntityComponents take the dependency from the LendingProvider
+Note: Modifying the InputJson could make the test suits to fail
 
-## TODOs
-- [ ] Add Instructions to use React DevTools    
-- [ ] Add Functionality to Save Form in LocalStorage
-- [ ] Add Functionality to add new input forms
-- [ ] Add Functionality to discard malformed forms? 
-- [x] Fix Bug with stale data while going back and forth 
+## Instructions
